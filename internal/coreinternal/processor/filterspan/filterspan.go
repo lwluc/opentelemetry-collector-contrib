@@ -115,7 +115,7 @@ func (mp *propertiesMatcher) MatchSpan(span ptrace.Span, resource pcommon.Resour
 		// Check resource and spans for service.name
 		serviceName, found := serviceNameForResource(resource)
 		if !found {
-			serviceName, found = serviceNameForSpan(span)
+			serviceName, _ = serviceNameForSpan(span)
 		}
 		if !mp.serviceFilters.Matches(serviceName) {
 			return false
