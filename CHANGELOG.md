@@ -398,6 +398,7 @@ https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/9278.
 - `tracegen`: Provide official container images (#7179)
 - `scrapertest`: Add comparison function for pdata.Metrics (#7400)
 - `prometheusremotewriteexporter` : Dropping the condition to replace _ with key_ as __ label is reserved and _ is not (#7112)
+- `filterprocessor`: Add ability to filter trace data (#5838)
 
 ### 🛑 Breaking changes 🛑
 
