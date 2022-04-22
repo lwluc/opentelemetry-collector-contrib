@@ -16,7 +16,6 @@ package filterspan // import "github.com/open-telemetry/opentelemetry-collector-
 
 import (
 	"fmt"
-
 	"go.opentelemetry.io/collector/pdata/pcommon"
 	"go.opentelemetry.io/collector/pdata/ptrace"
 	conventions "go.opentelemetry.io/collector/semconv/v1.6.1"
@@ -139,7 +138,7 @@ func serviceNameForResource(resource pcommon.Resource) (string, bool) {
 }
 
 // serviceNameForSpan gets the service name for a span
-func serviceNameForSpan(span pdata.Span) (string, bool) {
+func serviceNameForSpan(span ptrace.Span) (string, bool) {
 	service, found := span.Attributes().Get(conventions.AttributeServiceName)
 	if !found {
 		return "<nil-service-name>", found
