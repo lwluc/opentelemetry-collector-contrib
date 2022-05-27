@@ -34,6 +34,7 @@ import (
 	"github.com/open-telemetry/opentelemetry-collector-contrib/exporter/azuremonitorexporter"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/exporter/carbonexporter"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/exporter/clickhouseexporter"
+	"github.com/open-telemetry/opentelemetry-collector-contrib/exporter/cloudeventhttpexporter"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/exporter/coralogixexporter"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/exporter/datadogexporter"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/exporter/dynatraceexporter"
@@ -278,6 +279,7 @@ func Components() (component.Factories, error) {
 		tanzuobservabilityexporter.NewFactory(),
 		tencentcloudlogserviceexporter.NewFactory(),
 		zipkinexporter.NewFactory(),
+		cloudeventhttpexporter.NewFactory(),
 	}
 	factories.Exporters, err = component.MakeExporterFactoryMap(exporters...)
 	if err != nil {

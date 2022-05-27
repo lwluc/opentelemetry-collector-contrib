@@ -7,7 +7,6 @@ import (
 	"encoding/gob"
 	"fmt"
 	cloudevents "github.com/cloudevents/sdk-go/v2"
-	"github.com/cloudevents/sdk-go/v2/event"
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/pdata/ptrace"
 	"net/http"
@@ -30,7 +29,7 @@ func createCloudEventExporter(cfg *Config, settings component.TelemetrySettings)
 }
 
 func (ce *cloudEventExporter) pushTraces(ctx context.Context, td ptrace.Traces) error {
-	var batch []event.Event
+	var batch []cloudevents.Event
 
 	for i := 0; i < 10; i++ {
 		e, err := ce.createEvent(i)
@@ -49,29 +48,29 @@ func (ce *cloudEventExporter) pushTraces(ctx context.Context, td ptrace.Traces) 
 	return nil
 }
 
-func (ce *cloudEventExporter) createEvent(i int) (event.Event, error) {
-	e := cloudevents.NewEvent()
+func (ce *cloudEventExporter) createEvent(i int) (cloudevents.Event, error) {
+	event := cloudevents.NewEvent()
 
-	e.SetSpecVersion("1.0")
-	e.SetID(string(i))
-	e.SetType("com.cloudevents.sample.sent")
-	err := e.ExtensionAs("traceid", "test")
+	event.SetSpecVersion("1.0")
+	event.SetID(string(i))
+	event.SetType("com.cloudevents.sample.sent")
+	err := event.ExtensionAs("traceid", "test")
 	if err != nil {
-		return event.Event{}, err
+		return event, err
 	}
-	err2 := e.ExtensionAs("group", "otel")
+	err2 := event.ExtensionAs("group", "otel")
 	if err2 != nil {
-		return event.Event{}, err2
+		return event, err2
 	}
-	e.SetSource("https://github.com/cloudevents/sdk-go/v2/samples/httpb/sender")
-	_ = e.SetData(cloudevents.ApplicationJSON, map[string]interface{}{
+	event.SetSource("https://github.com/cloudevents/sdk-go/v2/samples/httpb/sender")
+	_ = event.SetData(cloudevents.ApplicationJSON, map[string]interface{}{
 		"id":      i,
 		"message": "Hello, World!",
 	})
-	return e, err
+	return event, err
 }
 
-func (ce *cloudEventExporter) buildAndSendBatch(ctx context.Context, batch []event.Event) error {
+func (ce *cloudEventExporter) buildAndSendBatch(ctx context.Context, batch []cloudevents.Event) error {
 	buf := &bytes.Buffer{}
 	gob.NewEncoder(buf).Encode(batch)
 	body := buf.Bytes()

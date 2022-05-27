@@ -126,6 +126,7 @@ require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/windowsperfcountersreceiver v0.49.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zipkinreceiver v0.49.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zookeeperreceiver v0.49.0
+	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/cloudeventhttpexporter v0.49.0
 	github.com/prometheus/prometheus v1.8.2-0.20220324155304-4d8bbfd4164c
 	github.com/stretchr/testify v1.7.1
 	go.opentelemetry.io/collector v0.49.1-0.20220422001137-87ab5de64ce4
@@ -495,6 +496,7 @@ require (
 	sigs.k8s.io/structured-merge-diff/v4 v4.2.1 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
 	skywalking.apache.org/repo/goapi v0.0.0-20220121092418-9c455d0dda3f // indirect
+	github.com/cloudevents/sdk-go/v2 v2.6.0 // indirect
 )
 
 // Replace references to modules that are in this repository with their relateive paths
@@ -801,6 +803,8 @@ replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/windo
 replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zipkinreceiver => ./receiver/zipkinreceiver
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zookeeperreceiver => ./receiver/zookeeperreceiver
+
+replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/cloudeventhttpexporter => ./exporter/cloudeventhttpexporter
 
 // see https://github.com/google/gnostic/issues/262
 replace github.com/googleapis/gnostic v0.5.6 => github.com/googleapis/gnostic v0.5.5
