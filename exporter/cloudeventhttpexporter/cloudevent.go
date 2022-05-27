@@ -1,68 +1,86 @@
 package cloudeventhttpexporter
 
 import (
+	"bytes"
 	"context"
+	"encoding/binary"
+	"fmt"
 	cloudevents "github.com/cloudevents/sdk-go/v2"
-	cehttp "github.com/cloudevents/sdk-go/v2/protocol/http"
+	"github.com/cloudevents/sdk-go/v2/event"
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/pdata/ptrace"
-	"log"
+	"net/http"
 )
 
 type cloudEventExporter struct {
-	url string
+	url   string
+	token string
+
+	client *http.Client
 }
 
 func createCloudEventExporter(cfg *Config, settings component.TelemetrySettings) (*cloudEventExporter, error) {
 	exporter := &cloudEventExporter{
-		url: cfg.Endpoint,
+		url:   cfg.Endpoint,
+		token: cfg.Format,
 	}
 
 	return exporter, nil
 }
 
 func (ce *cloudEventExporter) pushTraces(ctx context.Context, td ptrace.Traces) error {
-	ctxCloudEvent := cloudevents.ContextWithTarget(context.Background(), ce.url)
-
-	p, err := cloudevents.NewHTTP()
-	if err != nil {
-		log.Fatalf("failed to create protocol: %s", err.Error())
-	}
-
-	client, err := cloudevents.NewClient(p, cloudevents.WithTimeNow(), cloudevents.WithUUIDs())
-	if err != nil {
-		log.Fatalf("failed to create client, %v", err)
-	}
-
 	for i := 0; i < 10; i++ {
-		e := cloudevents.NewEvent()
-
-		e.SetSpecVersion("1.0")
-		e.SetID(string(i))
-		e.SetType("com.cloudevents.sample.sent")
-		err := e.ExtensionAs("traceid", "test")
+		e, err := ce.createEvent(i)
 		if err != nil {
 			return err
 		}
-		err2 := e.ExtensionAs("group", "otel")
+
+		err2 := ce.buildAndSendRequest(ctx, e)
 		if err2 != nil {
 			return err2
 		}
-		e.SetSource("https://github.com/cloudevents/sdk-go/v2/samples/httpb/sender")
-		_ = e.SetData(cloudevents.ApplicationJSON, map[string]interface{}{
-			"id":      i,
-			"message": "Hello, World!",
-		})
-
-		res := client.Send(ctxCloudEvent, e)
-		if cloudevents.IsUndelivered(res) {
-			log.Printf("Failed to send: %v", res)
-		} else {
-			var httpResult *cehttp.Result
-			cloudevents.ResultAs(res, &httpResult)
-			log.Printf("Sent %d with status code %d", i, httpResult.StatusCode)
-		}
 	}
 
+	return nil
+}
+
+func (ce *cloudEventExporter) createEvent(i int) (event.Event, error) {
+	e := cloudevents.NewEvent()
+
+	e.SetSpecVersion("1.0")
+	e.SetID(string(i))
+	e.SetType("com.cloudevents.sample.sent")
+	err := e.ExtensionAs("traceid", "test")
+	if err != nil {
+		return event.Event{}, err
+	}
+	err2 := e.ExtensionAs("group", "otel")
+	if err2 != nil {
+		return event.Event{}, err2
+	}
+	e.SetSource("https://github.com/cloudevents/sdk-go/v2/samples/httpb/sender")
+	_ = e.SetData(cloudevents.ApplicationJSON, map[string]interface{}{
+		"id":      i,
+		"message": "Hello, World!",
+	})
+	return e, err
+}
+
+func (ce *cloudEventExporter) buildAndSendRequest(ctx context.Context, e event.Event) error {
+	req, err := http.NewRequestWithContext(ctx, "POST", ce.url, bytes.NewReader(e.DataEncoded))
+	if err != nil {
+		return fmt.Errorf("failed to push trace data via Zipkin exporter: %w", err)
+	}
+	req.Header.Set("Authorization", "Bearer "+ce.token)
+	req.Header.Set("Content-Length", string(binary.Size(e.DataEncoded)))
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := ce.client.Do(req)
+	if err != nil {
+		return fmt.Errorf("failed to send cloud event: %w", err)
+	}
+	if resp.StatusCode < 200 || resp.StatusCode > 299 {
+		return fmt.Errorf("failed the request with status code %d", resp.StatusCode)
+	}
 	return nil
 }
