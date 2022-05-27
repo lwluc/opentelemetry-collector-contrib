@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
+	"encoding/gob"
 	"fmt"
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	"github.com/cloudevents/sdk-go/v2/event"
@@ -29,16 +30,20 @@ func createCloudEventExporter(cfg *Config, settings component.TelemetrySettings)
 }
 
 func (ce *cloudEventExporter) pushTraces(ctx context.Context, td ptrace.Traces) error {
+	var batch []event.Event
+
 	for i := 0; i < 10; i++ {
 		e, err := ce.createEvent(i)
 		if err != nil {
 			return err
 		}
 
-		err2 := ce.buildAndSendRequest(ctx, e)
-		if err2 != nil {
-			return err2
-		}
+		batch = append(batch, e)
+	}
+
+	err2 := ce.buildAndSendBatch(ctx, batch)
+	if err2 != nil {
+		return err2
 	}
 
 	return nil
@@ -66,13 +71,17 @@ func (ce *cloudEventExporter) createEvent(i int) (event.Event, error) {
 	return e, err
 }
 
-func (ce *cloudEventExporter) buildAndSendRequest(ctx context.Context, e event.Event) error {
-	req, err := http.NewRequestWithContext(ctx, "POST", ce.url, bytes.NewReader(e.DataEncoded))
+func (ce *cloudEventExporter) buildAndSendBatch(ctx context.Context, batch []event.Event) error {
+	buf := &bytes.Buffer{}
+	gob.NewEncoder(buf).Encode(batch)
+	body := buf.Bytes()
+
+	req, err := http.NewRequestWithContext(ctx, "POST", ce.url, bytes.NewReader(body))
 	if err != nil {
 		return fmt.Errorf("failed to push trace data via Zipkin exporter: %w", err)
 	}
 	req.Header.Set("Authorization", "Bearer "+ce.token)
-	req.Header.Set("Content-Length", string(binary.Size(e.DataEncoded)))
+	req.Header.Set("Content-Length", string(binary.Size(body)))
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := ce.client.Do(req)
