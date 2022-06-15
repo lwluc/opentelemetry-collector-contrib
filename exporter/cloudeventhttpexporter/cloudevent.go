@@ -9,7 +9,6 @@ import (
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/pdata/ptrace"
-	"go.uber.org/zap"
 	"net/http"
 )
 
@@ -18,8 +17,6 @@ type cloudEventExporter struct {
 	token string
 
 	client *http.Client
-
-	logger *zap.Logger
 }
 
 func createCloudEventExporter(cfg *Config, settings component.TelemetrySettings) (*cloudEventExporter, error) {
@@ -34,52 +31,41 @@ func createCloudEventExporter(cfg *Config, settings component.TelemetrySettings)
 }
 
 func (ce *cloudEventExporter) pushTraces(ctx context.Context, td ptrace.Traces) error {
-	ce.logger.Info("Got a Traces")
+	fmt.Println("Got a Traces")
 	var batch []cloudevents.Event
 
 	for i := 0; i < 10; i++ {
-		e, err := ce.createEvent(i)
-		if err != nil {
-			return err
-		}
-
-		batch = append(batch, e)
+		event := ce.createEvent(i)
+		batch = append(batch, event)
 	}
 
-	err2 := ce.buildAndSendBatch(ctx, batch)
-	if err2 != nil {
-		return err2
+	err := ce.buildAndSendBatch(ctx, batch)
+	if err != nil {
+		return err
 	}
 
 	return nil
 }
 
-func (ce *cloudEventExporter) createEvent(i int) (cloudevents.Event, error) {
-	ce.logger.Info("Creating a cloud event")
+func (ce *cloudEventExporter) createEvent(i int) cloudevents.Event {
+	fmt.Println("Creating a cloud event")
 	event := cloudevents.NewEvent()
 
 	event.SetSpecVersion("1.0")
 	event.SetID(string(i))
 	event.SetType("com.cloudevents.sample.sent")
-	err := event.ExtensionAs("traceid", "test")
-	if err != nil {
-		return event, err
-	}
-	err2 := event.ExtensionAs("group", "otel")
-	if err2 != nil {
-		return event, err2
-	}
+	event.SetExtension("traceid", "test")
+	event.SetExtension("group", "otel")
 	event.SetSource("https://github.com/cloudevents/sdk-go/v2/samples/httpb/sender")
 	_ = event.SetData(cloudevents.ApplicationJSON, map[string]interface{}{
 		"id":      i,
 		"message": "Hello, World!",
 	})
-	return event, err
+	return event
 }
 
 func (ce *cloudEventExporter) buildAndSendBatch(ctx context.Context, batch []cloudevents.Event) error {
-	ce.logger.Info("Setting up own telemetry...")
-	ce.logger.Info("Sending cloud events")
+	fmt.Println("Sending cloud events")
 	buf := &bytes.Buffer{}
 	gob.NewEncoder(buf).Encode(batch)
 	body := buf.Bytes()
@@ -96,7 +82,7 @@ func (ce *cloudEventExporter) buildAndSendBatch(ctx context.Context, batch []clo
 	if err != nil {
 		return fmt.Errorf("failed to send cloud event: %w", err)
 	}
-	ce.logger.Info("Sent cloud events with code: " + string(resp.StatusCode))
+	fmt.Println("Sent cloud events with code: " + string(resp.StatusCode))
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
 		return fmt.Errorf("failed the request with status code %d", resp.StatusCode)
 	}
