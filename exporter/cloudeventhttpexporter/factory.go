@@ -1,16 +1,14 @@
 package cloudeventhttpexporter
 
 import (
+	"context"
+	"errors"
+
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/config"
 	"go.opentelemetry.io/collector/config/confighttp"
 	"go.opentelemetry.io/collector/exporter/exporterhelper"
 	"time"
-)
-
-import (
-	"context"
-	"errors"
 )
 
 const (
@@ -49,22 +47,24 @@ func createTracesExporter(
 	set component.ExporterCreateSettings,
 	cfg config.Exporter,
 ) (component.TracesExporter, error) {
-	zc := cfg.(*Config)
+	cc := cfg.(*Config)
 
-	if zc.Endpoint == "" {
+	if cc.Endpoint == "" {
 		// TODO https://github.com/open-telemetry/opentelemetry-collector/issues/215
 		return nil, errors.New("exporter config requires a non-empty 'endpoint'")
 	}
 
-	ze, err := createCloudEventExporter(zc, set.TelemetrySettings)
+	ce, err := createCloudEventExporter(cc, set.TelemetrySettings)
 	if err != nil {
 		return nil, err
 	}
 	return exporterhelper.NewTracesExporter(
-		zc,
+		cc,
 		set,
-		ze.pushTraces,
+		ce.pushTraces,
+		exporterhelper.WithStart(ce.start),
+		// explicitly disable since we rely on http.Client timeout logic.
 		exporterhelper.WithTimeout(exporterhelper.TimeoutSettings{Timeout: 0}),
-		exporterhelper.WithQueue(zc.QueueSettings),
-		exporterhelper.WithRetry(zc.RetrySettings))
+		exporterhelper.WithQueue(cc.QueueSettings),
+		exporterhelper.WithRetry(cc.RetrySettings))
 }

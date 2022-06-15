@@ -8,6 +8,7 @@ import (
 	"fmt"
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	"go.opentelemetry.io/collector/component"
+	"go.opentelemetry.io/collector/config/confighttp"
 	"go.opentelemetry.io/collector/pdata/ptrace"
 	"net/http"
 )
@@ -17,17 +18,31 @@ type cloudEventExporter struct {
 	token string
 
 	client *http.Client
+
+	clientSettings *confighttp.HTTPClientSettings
+	settings       component.TelemetrySettings
 }
 
 func createCloudEventExporter(cfg *Config, settings component.TelemetrySettings) (*cloudEventExporter, error) {
 	exporter := &cloudEventExporter{
 		url:   cfg.Endpoint,
 		token: cfg.Format,
+
+		client: nil,
+
+		clientSettings: &cfg.HTTPClientSettings,
+		settings:       settings,
 	}
 
 	fmt.Println("Creating CloudEvent exporter")
 
 	return exporter, nil
+}
+
+// start creates the http client
+func (ce *cloudEventExporter) start(_ context.Context, host component.Host) (err error) {
+	ce.client, err = ce.clientSettings.ToClient(host.GetExtensions(), ce.settings)
+	return
 }
 
 func (ce *cloudEventExporter) pushTraces(ctx context.Context, td ptrace.Traces) error {
