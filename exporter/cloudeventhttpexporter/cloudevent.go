@@ -3,10 +3,10 @@ package cloudeventhttpexporter
 import (
 	"bytes"
 	"context"
-	"encoding/binary"
-	"encoding/gob"
+	"encoding/json"
 	"fmt"
 	cloudevents "github.com/cloudevents/sdk-go/v2"
+	"github.com/google/uuid"
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/config/confighttp"
 	"go.opentelemetry.io/collector/pdata/ptrace"
@@ -62,44 +62,43 @@ func (ce *cloudEventExporter) pushTraces(ctx context.Context, td ptrace.Traces) 
 	return nil
 }
 
-func (ce *cloudEventExporter) createEvent(i int) cloudevents.Event {
+func (ce *cloudEventExporter) createEvent(id int) cloudevents.Event {
 	fmt.Println("Creating a cloud event")
 	event := cloudevents.NewEvent()
 
 	event.SetSpecVersion("1.0")
-	event.SetID(string(i))
+	event.SetID(uuid.New().String())
 	event.SetType("com.cloudevents.sample.sent")
 	event.SetExtension("traceid", "test")
 	event.SetExtension("group", "otel")
 	event.SetSource("https://github.com/cloudevents/sdk-go/v2/samples/httpb/sender")
 	_ = event.SetData(cloudevents.ApplicationJSON, map[string]interface{}{
-		"id":      i,
+		"id":      id,
 		"message": "Hello, World!",
 	})
 	return event
 }
 
 func (ce *cloudEventExporter) buildAndSendBatch(ctx context.Context, batch []cloudevents.Event) error {
-	fmt.Println("Sending cloud events")
-	buf := &bytes.Buffer{}
-	gob.NewEncoder(buf).Encode(batch)
-	body := buf.Bytes()
+	fmt.Println("Sending cloud events (token: " + ce.token + ")")
 
-	req, err := http.NewRequestWithContext(ctx, "POST", ce.url, bytes.NewReader(body))
+	j, _ := json.Marshal(batch)
+	fmt.Println(string(j))
+
+	req, err := http.NewRequestWithContext(ctx, "POST", ce.url, bytes.NewReader(j))
 	if err != nil {
 		return fmt.Errorf("failed to push trace data via Zipkin exporter: %w", err)
 	}
 	req.Header.Set("Authorization", "Bearer "+ce.token)
-	req.Header.Set("Content-Length", string(binary.Size(body)))
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := ce.client.Do(req)
 	if err != nil {
 		return fmt.Errorf("failed to send cloud event: %w", err)
 	}
-	fmt.Println("Sent cloud events with code: " + string(resp.StatusCode))
+	fmt.Println("Sent cloud events with code: " + resp.Status)
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
-		return fmt.Errorf("failed the request with status code %d", resp.StatusCode)
+		return fmt.Errorf("failed the request with status code %s", resp.Status)
 	}
 	return nil
 }
