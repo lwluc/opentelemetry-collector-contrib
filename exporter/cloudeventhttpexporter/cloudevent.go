@@ -33,9 +33,6 @@ func createCloudEventExporter(cfg *Config, settings component.TelemetrySettings)
 		clientSettings: &cfg.HTTPClientSettings,
 		settings:       settings,
 	}
-
-	fmt.Println("Creating CloudEvent exporter")
-
 	return exporter, nil
 }
 
@@ -46,12 +43,23 @@ func (ce *cloudEventExporter) start(_ context.Context, host component.Host) (err
 }
 
 func (ce *cloudEventExporter) pushTraces(ctx context.Context, td ptrace.Traces) error {
-	fmt.Println("Got a Traces")
 	var batch []cloudevents.Event
 
-	for i := 0; i < 10; i++ {
-		event := ce.createEvent(i)
-		batch = append(batch, event)
+	for i := 0; i < td.ResourceSpans().Len(); i++ {
+		spans := td.ResourceSpans().At(i)
+		for i := 0; i < spans.ScopeSpans().Len(); i++ {
+			scopeSpans := spans.ScopeSpans().At(i)
+			for i := 0; i < scopeSpans.Spans().Len(); i++ {
+				span := scopeSpans.Spans().At(i)
+
+				event := ce.createEvent(
+					span.TraceID().HexString(),
+					span.Kind().String(),
+					span.Name(),
+					span.Attributes().AsRaw())
+				batch = append(batch, event)
+			}
+		}
 	}
 
 	err := ce.buildAndSendBatch(ctx, batch)
@@ -62,28 +70,23 @@ func (ce *cloudEventExporter) pushTraces(ctx context.Context, td ptrace.Traces) 
 	return nil
 }
 
-func (ce *cloudEventExporter) createEvent(id int) cloudevents.Event {
-	fmt.Println("Creating a cloud event")
+func (ce *cloudEventExporter) createEvent(traceId string, spanName string, spanKind string, data map[string]interface{}) cloudevents.Event {
 	event := cloudevents.NewEvent()
 
 	event.SetSpecVersion("1.0")
 	event.SetID(uuid.New().String())
-	event.SetType("com.cloudevents.sample.sent")
-	event.SetExtension("traceid", "test")
+	event.SetType("otel-based")
+	event.SetExtension("traceId", traceId)
+	event.SetExtension("spanName", spanName)
+	event.SetExtension("spanKind", spanKind)
 	event.SetExtension("group", "otel")
 	event.SetSource("https://github.com/cloudevents/sdk-go/v2/samples/httpb/sender")
-	_ = event.SetData(cloudevents.ApplicationJSON, map[string]interface{}{
-		"id":      id,
-		"message": "Hello, World!",
-	})
+	_ = event.SetData(cloudevents.ApplicationJSON, data)
 	return event
 }
 
 func (ce *cloudEventExporter) buildAndSendBatch(ctx context.Context, batch []cloudevents.Event) error {
-	fmt.Println("Sending cloud events (token: " + ce.token + ")")
-
 	j, _ := json.Marshal(batch)
-	fmt.Println(string(j))
 
 	req, err := http.NewRequestWithContext(ctx, "POST", ce.url, bytes.NewReader(j))
 	if err != nil {
@@ -96,7 +99,6 @@ func (ce *cloudEventExporter) buildAndSendBatch(ctx context.Context, batch []clo
 	if err != nil {
 		return fmt.Errorf("failed to send cloud event: %w", err)
 	}
-	fmt.Println("Sent cloud events with code: " + resp.Status)
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
 		return fmt.Errorf("failed the request with status code %s", resp.Status)
 	}
