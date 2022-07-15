@@ -12,6 +12,7 @@ require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/azuremonitorexporter v0.69.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/carbonexporter v0.69.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/clickhouseexporter v0.69.0
+	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/cloudeventhttpexporter v0.69.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/coralogixexporter v0.69.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/datadogexporter v0.69.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/dynatraceexporter v0.69.0
@@ -1011,6 +1012,8 @@ replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/windo
 replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zipkinreceiver => ./receiver/zipkinreceiver
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zookeeperreceiver => ./receiver/zookeeperreceiver
+
+replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/cloudeventhttpexporter => ./exporter/cloudeventhttpexporter
 
 // see https://github.com/google/gnostic/issues/262
 replace github.com/googleapis/gnostic v0.5.6 => github.com/googleapis/gnostic v0.5.5
