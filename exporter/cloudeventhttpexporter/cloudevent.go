@@ -11,6 +11,7 @@ import (
 	"go.opentelemetry.io/collector/config/confighttp"
 	"go.opentelemetry.io/collector/pdata/ptrace"
 	"net/http"
+	"time"
 )
 
 type cloudEventExporter struct {
@@ -50,13 +51,7 @@ func (ce *cloudEventExporter) pushTraces(ctx context.Context, td ptrace.Traces) 
 		for i := 0; i < spans.ScopeSpans().Len(); i++ {
 			scopeSpans := spans.ScopeSpans().At(i)
 			for i := 0; i < scopeSpans.Spans().Len(); i++ {
-				span := scopeSpans.Spans().At(i)
-
-				event := ce.createEvent(
-					span.TraceID().HexString(),
-					span.Kind().String(),
-					span.Name(),
-					span.Attributes().AsRaw())
+				event := ce.createEvent(scopeSpans.Spans().At(i))
 				batch = append(batch, event)
 			}
 		}
@@ -70,18 +65,28 @@ func (ce *cloudEventExporter) pushTraces(ctx context.Context, td ptrace.Traces) 
 	return nil
 }
 
-func (ce *cloudEventExporter) createEvent(traceId string, spanName string, spanKind string, data map[string]interface{}) cloudevents.Event {
+func (ce *cloudEventExporter) createEvent(span ptrace.Span) cloudevents.Event {
 	event := cloudevents.NewEvent()
 
 	event.SetSpecVersion("1.0")
 	event.SetID(uuid.New().String())
-	event.SetType("otel-based")
-	event.SetExtension("traceId", traceId)
-	event.SetExtension("spanName", spanName)
-	event.SetExtension("spanKind", spanKind)
-	event.SetExtension("group", "otel")
-	event.SetSource("https://github.com/cloudevents/sdk-go/v2/samples/httpb/sender")
-	_ = event.SetData(cloudevents.ApplicationJSON, data)
+	event.SetExtension("time", span.EndTimestamp().AsTime().Format(time.RFC3339))
+	event.SetExtension("spanKind", span.Kind().String())
+	_ = event.SetData(cloudevents.ApplicationJSON, span.Attributes().AsRaw())
+
+	// Custom Values
+	eventType, _ := span.Attributes().Get("cloud_event.type")
+	event.SetType(eventType.StringVal())
+
+	source, _ := span.Attributes().Get("cloud_event.source")
+	event.SetSource(source.StringVal())
+
+	group, _ := span.Attributes().Get("cloud_event.group")
+	event.SetExtension("group", group.StringVal())
+
+	traceId, _ := span.Attributes().Get("cloud_event.traceId")
+	event.SetExtension("traceId", traceId.StringVal())
+
 	return event
 }
 
