@@ -4,11 +4,12 @@ import (
 	"context"
 	"errors"
 
+	"time"
+
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/config"
 	"go.opentelemetry.io/collector/config/confighttp"
 	"go.opentelemetry.io/collector/exporter/exporterhelper"
-	"time"
 )
 
 const (
@@ -18,6 +19,8 @@ const (
 	defaultTimeout = time.Second * 5
 
 	defaultFormat = "json"
+	// The stability level of the exporter.
+	stability = component.StabilityLevelBeta
 )
 
 // NewFactory creates a factory for Cloud Event exporter.
@@ -25,7 +28,7 @@ func NewFactory() component.ExporterFactory {
 	return component.NewExporterFactory(
 		typeStr,
 		createDefaultConfig,
-		component.WithTracesExporter(createTracesExporter))
+		component.WithTracesExporter(createTracesExporter, stability))
 }
 
 func createDefaultConfig() config.Exporter {
@@ -43,7 +46,7 @@ func createDefaultConfig() config.Exporter {
 }
 
 func createTracesExporter(
-	_ context.Context,
+	ctx context.Context,
 	set component.ExporterCreateSettings,
 	cfg config.Exporter,
 ) (component.TracesExporter, error) {
@@ -59,8 +62,9 @@ func createTracesExporter(
 		return nil, err
 	}
 	return exporterhelper.NewTracesExporter(
-		cc,
+		ctx,
 		set,
+		cfg,
 		ce.pushTraces,
 		exporterhelper.WithStart(ce.start),
 		// explicitly disable since we rely on http.Client timeout logic.
