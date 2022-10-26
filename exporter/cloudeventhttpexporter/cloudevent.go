@@ -5,13 +5,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"time"
+
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	"github.com/google/uuid"
 	"go.opentelemetry.io/collector/component"
 	"go.opentelemetry.io/collector/config/confighttp"
 	"go.opentelemetry.io/collector/pdata/ptrace"
-	"net/http"
-	"time"
 )
 
 type cloudEventExporter struct {
@@ -39,7 +40,7 @@ func createCloudEventExporter(cfg *Config, settings component.TelemetrySettings)
 
 // start creates the http client
 func (ce *cloudEventExporter) start(_ context.Context, host component.Host) (err error) {
-	ce.client, err = ce.clientSettings.ToClient(host.GetExtensions(), ce.settings)
+	ce.client, err = ce.clientSettings.ToClient(host, ce.settings)
 	return
 }
 
@@ -76,16 +77,16 @@ func (ce *cloudEventExporter) createEvent(span ptrace.Span) cloudevents.Event {
 
 	// Custom Values
 	eventType, _ := span.Attributes().Get("cloud_event.type")
-	event.SetType(eventType.StringVal())
+	event.SetType(eventType.AsString())
 
 	source, _ := span.Attributes().Get("cloud_event.source")
-	event.SetSource(source.StringVal())
+	event.SetSource(source.AsString())
 
 	group, _ := span.Attributes().Get("cloud_event.group")
-	event.SetExtension("group", group.StringVal())
+	event.SetExtension("group", group.AsString())
 
 	traceId, _ := span.Attributes().Get("cloud_event.traceId")
-	event.SetExtension("traceId", traceId.StringVal())
+	event.SetExtension("traceId", traceId.AsString())
 
 	return event
 }
