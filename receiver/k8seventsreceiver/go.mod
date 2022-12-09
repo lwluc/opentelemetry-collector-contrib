@@ -12,8 +12,8 @@ require (
 	go.opentelemetry.io/collector/pdata v0.66.1-0.20221202005155-1c54042beb70
 	go.opentelemetry.io/collector/semconv v0.66.1-0.20221202005155-1c54042beb70
 	go.uber.org/zap v1.24.0
-	k8s.io/api v0.25.4
-	k8s.io/apimachinery v0.25.4
+	k8s.io/api v0.25.5
+	k8s.io/apimachinery v0.25.5
 	k8s.io/client-go v0.25.4
 )
 
@@ -58,7 +58,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.11.1 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
-	golang.org/x/net v0.3.0 // indirect
+	golang.org/x/net v0.3.1-0.20221206200815-1e63c2f08a10 // indirect
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8 // indirect
 	golang.org/x/sys v0.3.0 // indirect
 	golang.org/x/term v0.3.0 // indirect
