@@ -28,7 +28,7 @@ type cloudEventExporter struct {
 func createCloudEventExporter(cfg *Config, settings component.TelemetrySettings) (*cloudEventExporter, error) {
 	exporter := &cloudEventExporter{
 		url:   cfg.Endpoint,
-		token: cfg.Format,
+		token: cfg.AccessToken,
 
 		client: nil,
 
@@ -96,7 +96,7 @@ func (ce *cloudEventExporter) buildAndSendBatch(ctx context.Context, batch []clo
 
 	req, err := http.NewRequestWithContext(ctx, "POST", ce.url, bytes.NewReader(j))
 	if err != nil {
-		return fmt.Errorf("failed to push trace data via Zipkin exporter: %w", err)
+		return fmt.Errorf("failed to push trace data via CloudEventHttp exporter: %w", err)
 	}
 	req.Header.Set("Authorization", "Bearer "+ce.token)
 	req.Header.Set("Content-Type", "application/json")

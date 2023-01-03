@@ -19,15 +19,14 @@ The following settings are required:
 
 By default, authentication Bearer Token is pass as HTTP-Header and must be configured under `format:`:
 
-- `format`: Bearer Token used to authenticate against the back-end API:
-  > **_NOTE:_**  This is just a hack-around to get startet. In the future there will be a separate (optional) property to set the token.
+- `access_token`: Bearer Token used to authenticate against the back-end API
 
 Example:
 
 ```yaml
 cloudevent:
   endpoint: "http://some.location.org:9411/api/cloud-events"
-  format: "access-token"
+  access_token: "access-token"
 ```
 
 [in-development]:https://github.com/open-telemetry/opentelemetry-collector#in-development
