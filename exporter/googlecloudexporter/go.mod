@@ -14,7 +14,7 @@ require (
 	go.opentelemetry.io/collector v0.67.0
 	go.opentelemetry.io/collector/component v0.67.0
 	go.opentelemetry.io/collector/confmap v0.67.0
-	go.opentelemetry.io/collector/featuregate v0.67.0
+	go.opentelemetry.io/collector/featuregate v0.69.0
 	go.opentelemetry.io/collector/pdata v1.0.0-rc1
 	go.opentelemetry.io/collector/semconv v0.67.0
 	google.golang.org/api v0.104.0
