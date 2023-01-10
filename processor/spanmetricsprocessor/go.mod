@@ -17,7 +17,7 @@ require (
 	go.opentelemetry.io/collector/pdata v1.0.0-rc1
 	go.opentelemetry.io/collector/processor/batchprocessor v0.67.0
 	go.opentelemetry.io/collector/receiver/otlpreceiver v0.67.0
-	go.opentelemetry.io/collector/semconv v0.67.0
+	go.opentelemetry.io/collector/semconv v0.69.0
 	go.uber.org/multierr v1.8.0
 	go.uber.org/zap v1.24.0
 	google.golang.org/grpc v1.51.0
