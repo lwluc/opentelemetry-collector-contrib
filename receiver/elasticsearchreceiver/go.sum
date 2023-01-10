@@ -840,8 +840,8 @@ go.opentelemetry.io/collector/confmap v0.67.0 h1:P8ZvoODl1fnOLSeQX+XX6GaRJe3e7hA
 go.opentelemetry.io/collector/confmap v0.67.0/go.mod h1:RD35X4ZRcpkNVyWxqC5of8PWbeCtIHhU8GYZrPv46Ho=
 go.opentelemetry.io/collector/consumer v0.67.0 h1:kjA23kxtC8Vt7u9YjpQwQkNj6Oe5O2ur1b9JbUFYuEI=
 go.opentelemetry.io/collector/consumer v0.67.0/go.mod h1:2Osu8k+Egw1tHopZRh+Wi2a70AkjeugUcXZyGZhAJFE=
-go.opentelemetry.io/collector/featuregate v0.67.0 h1:vq5zv0ztjdl2S00ENX0wGo7s9aAKzPL936B8+xScmM4=
-go.opentelemetry.io/collector/featuregate v0.67.0/go.mod h1:tewuFKJYalWBU0bmNKg++MC1ipINXUr6szYzOw2p1GI=
+go.opentelemetry.io/collector/featuregate v0.69.0 h1:TI6zcWszEbAP1UGyVIWFDKoltaPx4VprjGbd5jsDBj8=
+go.opentelemetry.io/collector/featuregate v0.69.0/go.mod h1:tewuFKJYalWBU0bmNKg++MC1ipINXUr6szYzOw2p1GI=
 go.opentelemetry.io/collector/pdata v1.0.0-rc1 h1:/eu/EGIuVAac/kdFrfYrOoHB3SmVyydo7Yh3wP6zJ6g=
 go.opentelemetry.io/collector/pdata v1.0.0-rc1/go.mod h1:wrkdk9IIdBXJZ/LLL6KOSk4SZPXBkJxf7VLX0HyMaWA=
 go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.36.4 h1:aUEBEdCa6iamGzg6fuYxDA8ThxvOG240mAvWDU+XLio=
