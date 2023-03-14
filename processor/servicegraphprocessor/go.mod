@@ -3,14 +3,14 @@ module github.com/open-telemetry/opentelemetry-collector-contrib/processor/servi
 go 1.18
 
 require (
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.2
 	go.opencensus.io v0.24.0
 	go.opentelemetry.io/collector v0.69.0
 	go.opentelemetry.io/collector/component v0.69.0
 	go.opentelemetry.io/collector/consumer v0.69.0
 	go.opentelemetry.io/collector/exporter/otlpexporter v0.69.0
 	go.opentelemetry.io/collector/pdata v1.0.0-rc3
-	go.opentelemetry.io/collector/semconv v0.69.0
+	go.opentelemetry.io/collector/semconv v0.73.0
 	go.uber.org/zap v1.24.0
 )
 
