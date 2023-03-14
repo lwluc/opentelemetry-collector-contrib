@@ -26,7 +26,7 @@ require (
 	github.com/prometheus/common v0.39.0
 	github.com/prometheus/prometheus v0.41.0
 	github.com/shirou/gopsutil/v3 v3.22.12
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.2
 	go.opentelemetry.io/collector v0.69.0
 	go.opentelemetry.io/collector/component v0.69.0
 	go.opentelemetry.io/collector/confmap v0.69.0
@@ -40,7 +40,7 @@ require (
 	go.opentelemetry.io/collector/processor/batchprocessor v0.69.0
 	go.opentelemetry.io/collector/processor/memorylimiterprocessor v0.69.0
 	go.opentelemetry.io/collector/receiver/otlpreceiver v0.69.0
-	go.opentelemetry.io/collector/semconv v0.69.0
+	go.opentelemetry.io/collector/semconv v0.73.0
 	go.uber.org/atomic v1.10.0
 	go.uber.org/multierr v1.9.0
 	go.uber.org/zap v1.24.0
