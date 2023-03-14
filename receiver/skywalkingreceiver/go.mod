@@ -5,13 +5,13 @@ go 1.18
 require (
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.2
 	go.opentelemetry.io/collector v0.69.0
 	go.opentelemetry.io/collector/component v0.69.0
 	go.opentelemetry.io/collector/confmap v0.69.0
 	go.opentelemetry.io/collector/consumer v0.69.0
 	go.opentelemetry.io/collector/pdata v1.0.0-rc3
-	go.opentelemetry.io/collector/semconv v0.69.0
+	go.opentelemetry.io/collector/semconv v0.73.0
 	go.uber.org/multierr v1.9.0
 	google.golang.org/grpc v1.52.0
 	google.golang.org/protobuf v1.28.1
