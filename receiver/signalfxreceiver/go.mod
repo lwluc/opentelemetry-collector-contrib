@@ -14,7 +14,7 @@ require (
 	go.opencensus.io v0.24.0
 	go.opentelemetry.io/collector v0.76.1
 	go.opentelemetry.io/collector/component v0.76.1
-	go.opentelemetry.io/collector/confmap v0.76.1
+	go.opentelemetry.io/collector/confmap v0.77.0
 	go.opentelemetry.io/collector/consumer v0.76.1
 	go.opentelemetry.io/collector/exporter v0.76.1
 	go.opentelemetry.io/collector/pdata v1.0.0-rcv0011
@@ -70,7 +70,7 @@ require (
 	github.com/uber/jaeger-client-go v2.30.0+incompatible // indirect
 	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
-	go.opentelemetry.io/collector/featuregate v0.76.1 // indirect
+	go.opentelemetry.io/collector/featuregate v0.77.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.40.0 // indirect
 	go.opentelemetry.io/otel v1.14.0 // indirect
 	go.opentelemetry.io/otel/metric v0.37.0 // indirect
