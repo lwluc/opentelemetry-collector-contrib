@@ -9,7 +9,7 @@ require (
 	go.opentelemetry.io/collector/component v0.76.1
 	go.opentelemetry.io/collector/confmap v0.76.1
 	go.opentelemetry.io/collector/exporter v0.76.1
-	go.opentelemetry.io/collector/featuregate v0.76.1
+	go.opentelemetry.io/collector/featuregate v0.77.0
 )
 
 require (
