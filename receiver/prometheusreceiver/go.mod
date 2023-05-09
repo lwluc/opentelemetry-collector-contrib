@@ -15,10 +15,10 @@ require (
 	github.com/stretchr/testify v1.8.2
 	go.opentelemetry.io/collector v0.76.1
 	go.opentelemetry.io/collector/component v0.76.1
-	go.opentelemetry.io/collector/confmap v0.76.1
+	go.opentelemetry.io/collector/confmap v0.77.0
 	go.opentelemetry.io/collector/consumer v0.76.1
 	go.opentelemetry.io/collector/exporter v0.76.1
-	go.opentelemetry.io/collector/featuregate v0.76.1
+	go.opentelemetry.io/collector/featuregate v0.77.0
 	go.opentelemetry.io/collector/pdata v1.0.0-rcv0011
 	go.opentelemetry.io/collector/processor/batchprocessor v0.76.1
 	go.opentelemetry.io/collector/receiver v0.76.1
@@ -129,7 +129,6 @@ require (
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.0.2 // indirect
 	github.com/ovh/go-ovh v1.3.0 // indirect
-	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
