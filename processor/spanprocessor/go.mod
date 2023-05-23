@@ -13,7 +13,7 @@ require (
 	go.opentelemetry.io/collector/confmap v0.76.1
 	go.opentelemetry.io/collector/consumer v0.76.1
 	go.opentelemetry.io/collector/pdata v1.0.0-rcv0011
-	go.opentelemetry.io/collector/semconv v0.76.1
+	go.opentelemetry.io/collector/semconv v0.78.1
 )
 
 require (
