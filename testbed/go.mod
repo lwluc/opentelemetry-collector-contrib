@@ -31,7 +31,7 @@ require (
 	github.com/stretchr/testify v1.8.2
 	go.opentelemetry.io/collector v0.76.1
 	go.opentelemetry.io/collector/component v0.76.1
-	go.opentelemetry.io/collector/confmap v0.76.1
+	go.opentelemetry.io/collector/confmap v0.78.1
 	go.opentelemetry.io/collector/consumer v0.76.1
 	go.opentelemetry.io/collector/exporter v0.76.1
 	go.opentelemetry.io/collector/exporter/loggingexporter v0.76.1
@@ -203,7 +203,7 @@ require (
 	github.com/vultr/govultr/v2 v2.17.2 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	go.opencensus.io v0.24.0 // indirect
-	go.opentelemetry.io/collector/featuregate v0.76.1 // indirect
+	go.opentelemetry.io/collector/featuregate v1.0.0-rcv0012 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.40.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.40.0 // indirect
 	go.opentelemetry.io/contrib/propagators/b3 v1.15.0 // indirect
@@ -222,7 +222,7 @@ require (
 	golang.org/x/mod v0.10.0 // indirect
 	golang.org/x/net v0.9.0 // indirect
 	golang.org/x/oauth2 v0.7.0 // indirect
-	golang.org/x/sys v0.7.0 // indirect
+	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/term v0.7.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/tools v0.8.0 // indirect
