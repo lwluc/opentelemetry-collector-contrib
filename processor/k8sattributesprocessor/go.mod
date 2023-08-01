@@ -6,11 +6,11 @@ require (
 	github.com/docker/docker v24.0.2+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/internal/k8sconfig v0.78.0
-	github.com/stretchr/testify v1.8.3
+	github.com/stretchr/testify v1.8.4
 	go.opencensus.io v0.24.0
 	go.opentelemetry.io/collector v0.78.3-0.20230525165144-87dd85a6c034
 	go.opentelemetry.io/collector/component v0.78.3-0.20230525165144-87dd85a6c034
-	go.opentelemetry.io/collector/confmap v0.78.3-0.20230525165144-87dd85a6c034
+	go.opentelemetry.io/collector/confmap v0.82.0
 	go.opentelemetry.io/collector/consumer v0.78.3-0.20230525165144-87dd85a6c034
 	go.opentelemetry.io/collector/pdata v1.0.0-rcv0012.0.20230525165144-87dd85a6c034
 	go.opentelemetry.io/collector/receiver v0.78.3-0.20230525165144-87dd85a6c034
@@ -50,6 +50,7 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.16.5 // indirect
 	github.com/knadh/koanf v1.5.0 // indirect
+	github.com/knadh/koanf/v2 v2.0.1 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
@@ -69,7 +70,7 @@ require (
 	github.com/rs/cors v1.9.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	go.opentelemetry.io/collector/exporter v0.78.3-0.20230525165144-87dd85a6c034 // indirect
-	go.opentelemetry.io/collector/featuregate v1.0.0-rcv0012.0.20230525165144-87dd85a6c034 // indirect
+	go.opentelemetry.io/collector/featuregate v1.0.0-rcv0014 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.42.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.42.0 // indirect
 	go.opentelemetry.io/otel v1.16.0 // indirect
