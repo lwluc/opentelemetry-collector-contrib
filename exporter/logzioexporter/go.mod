@@ -7,10 +7,10 @@ require (
 	github.com/jaegertracing/jaeger v1.41.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/internal/coreinternal v0.78.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/pkg/translator/jaeger v0.78.0
-	github.com/stretchr/testify v1.8.3
+	github.com/stretchr/testify v1.8.4
 	go.opentelemetry.io/collector v0.78.3-0.20230525165144-87dd85a6c034
 	go.opentelemetry.io/collector/component v0.78.3-0.20230525165144-87dd85a6c034
-	go.opentelemetry.io/collector/confmap v0.78.3-0.20230525165144-87dd85a6c034
+	go.opentelemetry.io/collector/confmap v0.83.0
 	go.opentelemetry.io/collector/consumer v0.78.3-0.20230525165144-87dd85a6c034
 	go.opentelemetry.io/collector/exporter v0.78.3-0.20230525165144-87dd85a6c034
 	go.opentelemetry.io/collector/pdata v1.0.0-rcv0012.0.20230525165144-87dd85a6c034
@@ -35,6 +35,7 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.16.5 // indirect
 	github.com/knadh/koanf v1.5.0 // indirect
+	github.com/knadh/koanf/v2 v2.0.1 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
@@ -48,7 +49,7 @@ require (
 	github.com/uber/jaeger-client-go v2.30.0+incompatible // indirect
 	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
 	go.opencensus.io v0.24.0 // indirect
-	go.opentelemetry.io/collector/featuregate v1.0.0-rcv0012.0.20230525165144-87dd85a6c034 // indirect
+	go.opentelemetry.io/collector/featuregate v1.0.0-rcv0014 // indirect
 	go.opentelemetry.io/collector/receiver v0.78.3-0.20230525165144-87dd85a6c034 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.42.0 // indirect
 	go.opentelemetry.io/otel v1.16.0 // indirect
